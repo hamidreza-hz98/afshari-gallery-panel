@@ -1,0 +1,16 @@
+import ContactPageWrapper from "@/components/wrappers/ContactPageWrapper";
+import React from "react";
+
+export const metadata = {
+  title: "فرم‌های تماس | فروشگاه اینترنتی گالری ساعت افشاری",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
+const page = () => {
+  return <ContactPageWrapper />;
+};
+
+export default page;

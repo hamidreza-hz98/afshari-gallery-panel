@@ -1,0 +1,16 @@
+import DashboardPageWrapper from "@/components/wrappers/DashboardPageWrapper";
+import React from "react";
+
+export const metadata = {
+  title: "داشبورد مدیریت | فروشگاه اینترنتی گالری ساعت افشاری",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
+const page = () => {
+  return <DashboardPageWrapper />;
+};
+
+export default page;
