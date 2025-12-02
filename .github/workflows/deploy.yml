@@ -1,4 +1,4 @@
-name: Deploy Panel
+name: 🚀 Deploy Panel
 
 on:
   push:
@@ -6,54 +6,49 @@ on:
       - master
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
 
     steps:
-      # 1️⃣ Checkout the repo
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 2️⃣ Log in to DockerHub
-      - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      # 3️⃣ Build Docker image from panel folder
-      - name: Build Panel Docker image
-        run: |
-          cd panel
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/afshari-panel:latest .
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
 
-      # 4️⃣ Push image to DockerHub
-      - name: Push Panel Docker image
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/afshari-panel:latest
+      - name: Build project
+        run: npm run build
 
-      # 5️⃣ Deploy to server via SSH
-      - name: Deploy Panel to Server
-        uses: webfactory/ssh-agent@v0.9.1
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Pull & Run Panel on Server
+      - name: Deploy build files to server
         run: |
-          ssh -o StrictHostKeyChecking=no root@89.32.249.114 << 'EOF'
-            set -e
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          rsync -avz --delete \
+          --exclude='.next/cache' \
+          --exclude='node_modules' \
+          $(ls -d .next package*.json public next.config.js 2>/dev/null || echo "") \
+          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/afshari-gallery/panel/
 
-            echo "🛑 Stopping old container..."
-            docker stop afshari-panel || true
-            docker rm afshari-panel || true
-
-            echo "⬇️ Pulling latest image..."
-            docker pull ${{ secrets.DOCKER_USERNAME }}/afshari-panel:latest
-
-            echo "🚀 Running new container..."
-            docker run -d \
-              --name afshari-panel \
-              -p 3001:3001 \
-              --restart always \
-              ${{ secrets.DOCKER_USERNAME }}/afshari-panel:latest
-
-            echo "✅ Panel deployed successfully!"
+      - name: Restart app via PM2
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd /var/www/afshari-gallery/panel
+          npm ci --omit=dev --legacy-peer-deps
+          PORT=3001 pm2 describe afshari-panel > /dev/null 2>&1
+          if [ $? -eq 0 ]; then
+            pm2 restart afshari-panel
+          else
+            PORT=3001 pm2 start npm --name afshari-panel -- start
+          fi
+          pm2 save
           EOF
