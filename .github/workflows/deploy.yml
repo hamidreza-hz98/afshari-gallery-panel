@@ -11,28 +11,42 @@ jobs:
     timeout-minutes: 45
 
     steps:
+      # 1. Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      # 2. Debug (optional but useful for first run)
+      - name: Debug folders
+        run: |
+          echo "Current folder:"
+          pwd
+          echo "List:"
+          ls -la
 
+      # 3. Login to DockerHub
+      - name: Login to DockerHub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login \
+            -u "${{ secrets.DOCKER_USERNAME }}" \
+            --password-stdin
+
+      # 4. Build Docker image (Dockerfile is in repo root)
       - name: Build image
         run: |
-          docker build \
-            -t ${{ secrets.DOCKER_USERNAME }}/afshari-panel:latest \
-            -f ./panel/Dockerfile \
-            ./panel
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/afshari-panel:latest .
 
+      # 5. Push image to DockerHub
       - name: Push image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/afshari-panel:latest
 
+      # 6. Setup SSH for deploy
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      # 7. Connect to server and deploy
       - name: Pull & Run on Server
         run: |
           ssh -o StrictHostKeyChecking=no root@89.32.249.114 << 'EOF'
@@ -45,12 +59,12 @@ jobs:
             echo "⬇️ Pulling new image..."
             docker pull hamidrezahz98/afshari-panel:latest
 
-            echo "🚀 Running new version..."
+            echo "🚀 Running new container..."
             docker run -d \
               --name panel \
               -p 3001:3001 \
               --restart always \
               hamidrezahz98/afshari-panel:latest
 
-            echo "✅ PANEL DEPLOYED"
+            echo "✅ PANEL DEPLOYED SUCCESSFULLY"
           EOF
