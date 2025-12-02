@@ -38,16 +38,29 @@ jobs:
             $(ls -d .next package*.json public next.config.js 2>/dev/null || echo "") \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/afshari-gallery/panel/
 
-      - name: Restart app via PM2
+            - name: Restart app via PM2
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no \
+              -o ServerAliveInterval=30 \
+              -o ServerAliveCountMax=5 \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          set -e
+          echo "Connected to server"
+          
           cd /var/www/afshari-gallery/panel
+
           npm ci --omit=dev --legacy-peer-deps
-          PORT=3001 pm2 describe afshari-panel > /dev/null 2>&1
-          if [ $? -eq 0 ]; then
-            pm2 restart afshari-panel
+
+          if pm2 describe afshari-panel > /dev/null 2>&1; then
+            echo "Restarting existing process..."
+            PORT=3001 pm2 restart afshari-panel
           else
+            echo "Starting new process..."
             PORT=3001 pm2 start npm --name afshari-panel -- start
           fi
+
           pm2 save
+          echo "✅ Panel restarted successfully"
+          exit
           EOF
+        shell: bash
