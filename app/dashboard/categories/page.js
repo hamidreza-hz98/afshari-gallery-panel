@@ -7,8 +7,10 @@ export const metadata = {
 
 const page = () => {
   return (
-    <CategoriesPageWrapper />
-  )
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <CategoriesPageWrapper />
+    </React.Suspense>
+  );
 }
 
 export default page

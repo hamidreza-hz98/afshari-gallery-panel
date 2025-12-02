@@ -10,7 +10,9 @@ export const metadata = {
 };
 
 const page = () => {
-  return <CreateOrUpdateProductPageWrapper />;
+  return <React.Suspense fallback={<div>Loading...</div>}>
+    <CreateOrUpdateProductPageWrapper />
+  </React.Suspense>;
 };
 
 export default page;
