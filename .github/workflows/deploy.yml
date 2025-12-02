@@ -19,13 +19,16 @@ jobs:
 
       - name: Build image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/afshari-panel:latest .
+          docker build \
+            -t ${{ secrets.DOCKER_USERNAME }}/afshari-panel:latest \
+            -f ./panel/Dockerfile \
+            ./panel
 
       - name: Push image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/afshari-panel:latest
 
-      - name: Deploy to server
+      - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
