@@ -31,13 +31,12 @@ jobs:
 
       - name: Deploy build files to server
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "mkdir -p /var/www/afshari-gallery/panel"
           rsync -avz --delete \
-          --exclude='.next/cache' \
-          --exclude='node_modules' \
-          $(ls -d .next package*.json public next.config.js 2>/dev/null || echo "") \
-          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/afshari-gallery/panel/
+            --exclude='.next/cache' \
+            --exclude='node_modules' \
+            $(ls -d .next package*.json public next.config.js 2>/dev/null || echo "") \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/afshari-gallery/panel/
 
       - name: Restart app via PM2
         run: |
