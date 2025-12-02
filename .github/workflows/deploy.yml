@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
@@ -21,13 +22,14 @@ jobs:
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no root@89.32.249.114 << 'EOF'
-            cd /var/www/afshari-gallery/panel && \
-            git pull origin master && \
-            docker build -t panel . && \
-            docker stop panel || true && \
-            docker rm panel || true && \
-            docker run -d \
-              --name panel \
-              -p 3001:3001 \
-              panel
+          cd /var/www/afshari-gallery/panel &&
+          git pull origin master &&
+          docker build --no-cache -t panel . &&
+          docker stop panel || true &&
+          docker rm panel || true &&
+          docker run -d \
+            --name panel \
+            -p 3001:3001 \
+            --restart always \
+            panel
           EOF
