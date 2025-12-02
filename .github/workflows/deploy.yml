@@ -14,27 +14,38 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up SSH
+      - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-            - name: Build & Run Container on Server
+      - name: Deploy Panel to Server
         run: |
           ssh -o StrictHostKeyChecking=no root@89.32.249.114 << 'EOF'
+            set -e
+
+            echo "✅ Going to project folder..."
             cd /var/www/afshari-gallery/panel || exit 1
 
+            echo "✅ Pulling latest changes..."
             git pull origin master
 
+            echo "🛑 Stopping old container..."
             docker stop panel || true
             docker rm panel || true
+
+            echo "🧹 Removing old image..."
             docker rmi panel || true
 
+            echo "🐳 Building new image..."
             docker build -t panel .
 
+            echo "🚀 Running new container..."
             docker run -d \
               --name panel \
               -p 3001:3001 \
               --restart always \
               panel
+
+            echo "✅ Panel deployed successfully!"
           EOF
