@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout code
@@ -24,43 +25,47 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Setup SSH
+      - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Deploy build files to server
+      - name: Sync panel files to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "mkdir -p /var/www/afshari-gallery/panel"
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
           rsync -avz --delete \
-            --exclude='.next/cache' \
-            --exclude='node_modules' \
+            --exclude=".next/cache" \
+            --exclude="node_modules" \
             $(ls -d .next package*.json public next.config.js 2>/dev/null || echo "") \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/afshari-gallery/panel/
 
-            - name: Restart app via PM2
-        run: |
-          ssh -o StrictHostKeyChecking=no \
-              -o ServerAliveInterval=30 \
-              -o ServerAliveCountMax=5 \
-              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          set -e
-          echo "Connected to server"
-          
-          cd /var/www/afshari-gallery/panel
-
-          npm ci --omit=dev --legacy-peer-deps
-
-          if pm2 describe afshari-panel > /dev/null 2>&1; then
-            echo "Restarting existing process..."
-            PORT=3001 pm2 restart afshari-panel
-          else
-            echo "Starting new process..."
-            PORT=3001 pm2 start npm --name afshari-panel -- start
-          fi
-
-          pm2 save
-          echo "✅ Panel restarted successfully"
-          exit
-          EOF
+      - name: Restart Panel with PM2
         shell: bash
+        run: |
+          ssh -T \
+            -o StrictHostKeyChecking=no \
+            -o ServerAliveInterval=30 \
+            -o ServerAliveCountMax=5 \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            set -e
+
+            echo "📁 Moving to panel directory..."
+            cd /var/www/afshari-gallery/panel
+
+            echo "📦 Installing prod dependencies..."
+            npm ci --omit=dev --legacy-peer-deps
+
+            if pm2 describe afshari-panel > /dev/null 2>&1; then
+              echo "🔄 Restarting existing PM2 process..."
+              PORT=3001 pm2 restart afshari-panel
+            else
+              echo "🚀 Starting new PM2 process..."
+              PORT=3001 pm2 start npm --name afshari-panel -- start
+            fi
+
+            pm2 save
+
+            echo "✅ PANEL DEPLOY SUCCESSFUL"
+            exit
+          EOF
