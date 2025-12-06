@@ -37,7 +37,7 @@ const CategoriesPageWrapper = () => {
       <Overview
         title="مدیریت دسته بندی ها"
         breadcrumbs={[
-          { name: "گالری ساعت افشاری" },
+          { name: "گالری ساعت وینش" },
           { name: "داشبورد", path: "/dashboard" },
           { name: "دسته بندی ها" },
         ]}

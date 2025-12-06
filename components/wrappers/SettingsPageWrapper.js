@@ -69,7 +69,7 @@ const SettingsPageWrapper = () => {
     <PageContainer
       title={settingsInfo[section].title}
       breadcrumbs={[
-        { name: "گالری ساعت افشاری" },
+        { name: "گالری ساعت وینش" },
         { name: "داشبورد", path: "/dashboard" },
         { name: settingsInfo[section].title, path: `/dashboard/${section}` },
       ]}

@@ -38,7 +38,7 @@ jobs:
             --exclude=".next/cache" \
             --exclude="node_modules" \
             $(ls -d .next package*.json public next.config.js 2>/dev/null || echo "") \
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/afshari-gallery/panel/
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/watch-gallery/panel/
 
       - name: Restart Panel with PM2
         shell: bash
@@ -51,17 +51,17 @@ jobs:
             set -e
 
             echo "📁 Moving to panel directory..."
-            cd /var/www/afshari-gallery/panel
+            cd /var/www/watch-gallery/panel
 
             echo "📦 Installing prod dependencies..."
             npm ci --omit=dev --legacy-peer-deps
 
-            if pm2 describe afshari-panel > /dev/null 2>&1; then
+            if pm2 describe vinesh-watch-panel > /dev/null 2>&1; then
               echo "🔄 Restarting existing PM2 process..."
-              PORT=3001 pm2 restart afshari-panel
+              PORT=3001 pm2 restart vinesh-watch-panel
             else
               echo "🚀 Starting new PM2 process..."
-              PORT=3001 pm2 start npm --name afshari-panel -- start
+              PORT=3001 pm2 start npm --name vinesh-watch-panel -- start
             fi
 
             pm2 save

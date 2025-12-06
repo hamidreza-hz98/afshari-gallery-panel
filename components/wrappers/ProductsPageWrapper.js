@@ -37,7 +37,7 @@ const ProductsPageWrapper = () => {
           <Overview
             title="مدیریت محصولات"
             breadcrumbs={[
-              { name: "گالری ساعت افشاری" },
+              { name: "گالری ساعت وینش" },
               { name: "داشبورد", path: "/dashboard" },
               { name: "محصولات" },
             ]}

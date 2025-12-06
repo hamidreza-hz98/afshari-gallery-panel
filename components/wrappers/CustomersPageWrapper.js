@@ -36,7 +36,7 @@ const CustomersPageWrapper = () => {
       <Overview
         title="مدیریت مشتریان"
         breadcrumbs={[
-          { name: "گالری ساعت افشاری" },
+          { name: "گالری ساعت وینش" },
           { name: "داشبورد", path: "/dashboard" },
           { name: "مشتریان" },
         ]}

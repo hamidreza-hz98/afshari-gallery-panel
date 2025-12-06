@@ -2,7 +2,7 @@ import CreateOrUpdateBrandPageWrapper from "@/components/wrappers/CreateOrUpdate
 import React from "react";
 
 export const metadata = {
-  title: "ایجاد / ویرایش برند | فروشگاه اینترنتی گالری ساعت افشاری",
+  title: "ایجاد / ویرایش برند | فروشگاه اینترنتی گالری ساعت وینش",
   robots: {
     index: false,
     follow: false,

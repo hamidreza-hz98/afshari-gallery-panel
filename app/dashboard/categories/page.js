@@ -2,7 +2,7 @@ import CategoriesPageWrapper from '@/components/wrappers/CategoriesPageWrapper'
 import React from 'react'
 
 export const metadata = {
-  title: "مدیریت دسته‌بندی‌ها | فروشگاه اینترنتی گالری ساعت افشاری",
+  title: "مدیریت دسته‌بندی‌ها | فروشگاه اینترنتی گالری ساعت وینش",
 };
 
 const page = () => {

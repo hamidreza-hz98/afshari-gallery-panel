@@ -29,7 +29,7 @@ const OrdersPageWrapper = () => {
       <Overview
         title="مدیریت سفارش ها"
         breadcrumbs={[
-          { name: "گالری ساعت افشاری" },
+          { name: "گالری ساعت وینش" },
           { name: "داشبورد", path: "/dashboard" },
           { name: "سفارش ها" },
         ]}

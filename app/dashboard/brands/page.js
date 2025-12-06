@@ -2,7 +2,7 @@ import BrandsPageWrapper from '@/components/wrappers/BrandsPageWrapper'
 import React from 'react'
 
 export const metadata = {
-  title: "مدیریت برندها | فروشگاه اینترنتی گالری ساعت افشاری",
+  title: "مدیریت برندها | فروشگاه اینترنتی گالری ساعت وینش",
 };
 
 const page = () => {

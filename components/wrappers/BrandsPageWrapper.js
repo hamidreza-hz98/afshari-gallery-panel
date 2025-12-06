@@ -35,7 +35,7 @@ const BrandsPageWrapper = () => {
       <Overview
         title="مدیریت برند ها"
         breadcrumbs={[
-          { name: "گالری ساعت افشاری" },
+          { name: "گالری ساعت وینش" },
           { name: "داشبورد", path: "/dashboard" },
           { name: "برند ها" },
         ]}

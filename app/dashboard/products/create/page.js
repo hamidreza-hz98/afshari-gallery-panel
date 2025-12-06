@@ -2,7 +2,7 @@ import CreateOrUpdateProductPageWrapper from "@/components/wrappers/CreateOrUpda
 import React from "react";
 
 export const metadata = {
-  title: "ایجاد / ویرایش محصول | فروشگاه اینترنتی گالری ساعت افشاری",
+  title: "ایجاد / ویرایش محصول | فروشگاه اینترنتی گالری ساعت وینش",
   robots: {
     index: false,
     follow: false,

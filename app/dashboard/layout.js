@@ -58,7 +58,7 @@ export default function DashboardLayout({ children }) {
       }}
     >
       <DashboardHeader
-        title="گالری ساعت افشاری"
+        title="گالری ساعت وینش"
         logo="/images/logo.jpg"
         menuOpen={isNavigationExpanded}
         onToggleMenu={handleToggleHeaderMenu}

@@ -2,7 +2,7 @@ import ContactPageWrapper from "@/components/wrappers/ContactPageWrapper";
 import React from "react";
 
 export const metadata = {
-  title: "فرم‌های تماس | فروشگاه اینترنتی گالری ساعت افشاری",
+  title: "فرم‌های تماس | فروشگاه اینترنتی گالری ساعت وینش",
   robots: {
     index: false,
     follow: false,

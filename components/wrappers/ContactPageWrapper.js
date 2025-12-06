@@ -30,7 +30,7 @@ const ContactPageWrapper = () => {
          <Overview
            title="مدیریت فرم های تماس"
            breadcrumbs={[
-             { name: "گالری ساعت افشاری" },
+             { name: "گالری ساعت وینش" },
              { name: "داشبورد", path: "/dashboard" },
              { name: "فرم های تماس" },
            ]}

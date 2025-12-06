@@ -68,7 +68,7 @@ const CreateOrUpdateCategoryPageWrapper = () => {
     <PageContainer
       title="مشخصات دسته بندی:"
       breadcrumbs={[
-        { name: "گالری ساعت افشاری" },
+        { name: "گالری ساعت وینش" },
         { name: "داشبورد", path: "/dashboard" },
         { name: "دسته بندی ها", path: "/dashboard/categories" },
         { name: _id ? "ویرایش دسته بندی" : "ساخت دسته بندی جدید" },

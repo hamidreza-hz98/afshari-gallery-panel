@@ -64,7 +64,7 @@ const CreateOrUpdateProductPageWrapper = () => {
         <PageContainer
       title="مشخصات محصول:"
       breadcrumbs={[
-        { name: "گالری ساعت افشاری" },
+        { name: "گالری ساعت وینش" },
         { name: "داشبورد", path: "/dashboard" },
         { name: "محصولات", path: "/dashboard/products" },
         { name: _id ? "ویرایش محصول" : "ساخت محصول جدید" },

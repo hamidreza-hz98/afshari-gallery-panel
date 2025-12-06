@@ -2,7 +2,7 @@ import OrderDetailsPageWrapper from "@/components/wrappers/OrderDetailsPageWrapp
 import React from "react";
 
 export const metadata = {
-  title: "جزئیات سفارش | فروشگاه اینترنتی گالری ساعت افشاری",
+  title: "جزئیات سفارش | فروشگاه اینترنتی گالری ساعت وینش",
   robots: {
     index: false,
     follow: false,

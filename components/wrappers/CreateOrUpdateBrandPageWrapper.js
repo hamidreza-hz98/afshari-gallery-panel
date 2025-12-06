@@ -67,7 +67,7 @@ const CreateOrUpdateBrandPageWrapper = () => {
   return (
     <PageContainer  title="مشخصات برند:"
         breadcrumbs={[
-          { name: "گالری ساعت افشاری" },
+          { name: "گالری ساعت وینش" },
           { name: "داشبورد", path: "/dashboard" },
           { name: "برند ها", path: "/dashboard/brands" },
           { name: _id ? "ویرایش برند" : "ساخت برند جدید" },

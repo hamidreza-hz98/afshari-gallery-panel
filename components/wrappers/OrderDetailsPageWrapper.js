@@ -65,7 +65,7 @@ const OrderDetailsPageWrapper = ({_id}) => {
     <PageContainer
       title="مشخصات سفارش:"
       breadcrumbs={[
-        { name: "گالری ساعت افشاری" },
+        { name: "گالری ساعت وینش" },
         { name: "داشبورد", path: "/dashboard" },
         { name: "سفارش ها", path: "/dashboard/orders" },
         { name: _id ? "ویرایش سفارش" : "ساخت سفارش جدید" },
